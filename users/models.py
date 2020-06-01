@@ -9,7 +9,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
     email = models.EmailField(max_length=150)
-    bio = models.TextField()
+    signup_confirmation = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
