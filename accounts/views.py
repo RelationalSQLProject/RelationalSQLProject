@@ -8,16 +8,16 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 
-from users.forms import SignUpForm
-from users.tokens import account_activation_token
+from accounts.forms import SignUpForm
+from accounts.tokens import account_activation_token
 
 
 def home_view(request):
-    return render(request, 'users/home.html')
+    return render(request, 'accounts/home.html')
 
 
 def activation_sent_view(request):
-    return render(request, 'users/activation_sent.html')
+    return render(request, 'accounts/activation_sent.html')
 
 
 def activate(request, uidb64, token):
@@ -34,7 +34,7 @@ def activate(request, uidb64, token):
         login(request, user)
         return redirect('home')
     else:
-        return render(request, 'users/activation_invalid.html')
+        return render(request, 'accounts/activation_invalid.html')
 
 
 def signup_view(request):
@@ -53,7 +53,7 @@ def signup_view(request):
             subject = 'Please Activate Your Account'
             # load a template like get_template()
             # and calls its render() method immediately.
-            message = render_to_string('users/activation_request.html', {
+            message = render_to_string('accounts/activation_request.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -64,5 +64,5 @@ def signup_view(request):
             return redirect('activation_sent')
     else:
         form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(request, 'accounts/signup.html', {'form': form})
 
