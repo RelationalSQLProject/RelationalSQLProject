@@ -11,7 +11,7 @@ account_patterns = [
     path('sent/', activation_sent_view, name='activation_sent'),
     path('activate/<slug:uidb64>/<slug:token>/', activate, name='activate'),
 
-    # Password reset urls
+    # Password reset/change urls
     path('password_change/done/',
          auth_views.PasswordChangeDoneView.as_view(
              template_name='accounts/password_change_done.html'), name='password_change_done'),
