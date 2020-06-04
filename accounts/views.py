@@ -11,14 +11,9 @@ from django.template.loader import render_to_string
 from accounts.forms import SignUpForm
 from accounts.tokens import account_activation_token
 
-from accounts.models import Profile
-
 
 def home_view(request):
-
-    obj = Profile.objects.all()
-
-    return render(request, 'accounts/home.html', {'obj': obj})
+    return render(request, 'accounts/home.html')
 
 
 def activation_sent_view(request):

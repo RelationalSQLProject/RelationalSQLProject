@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
 
     # local apps
     'accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -74,22 +74,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['PSQL_NAME'],
-        'USER': os.environ['PSQL_USERNAME'],
-        'PASSWORD': os.environ['PSQL_PASSWORD'],
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
