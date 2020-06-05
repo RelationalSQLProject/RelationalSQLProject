@@ -36,7 +36,7 @@ class Listing(models.Model):
     def get_current_price(self):
         pass
 
-    def is_active(self):
+    def has_ended(self):
         pass
 
     def remaining_minutes(self):
