@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     # local apps
     'accounts',
-
+    'listings',
 ]
 
 MIDDLEWARE = [
