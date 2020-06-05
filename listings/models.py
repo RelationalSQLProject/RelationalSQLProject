@@ -6,7 +6,7 @@ from listings.constants import PRODUCT_CONDITION, CATEGORIES
 
 class Product(models.Model):
     name = models.CharField(max_length=30)
-    category = models.CharField(choices=CATEGORIES)
+    category = models.CharField(max_length=50, choices=CATEGORIES)
     condition = models.PositiveSmallIntegerField(choices=PRODUCT_CONDITION)
     description = models.CharField(max_length=60, blank=True)
 
@@ -24,9 +24,9 @@ class Listing(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     is_active = models.BooleanField(default=True)
-    starting_price = models.DecimalField(decimal_places=2)
-    ending_price = models.DecimalField(decimal_places=2)
-    winning_bidder = models.ForeignKey(User, related_name='won_auction', blank=True, null=True)
+    starting_price = models.DecimalField(max_digits=9, decimal_places=2)
+    ending_price = models.DecimalField(max_digits=9, decimal_places=2)
+    winning_bidder = models.ForeignKey(User, related_name='won_auction', blank=True, null=True, on_delete=models.SET("deleted"))
 
     def __str__(self):
         return self.name
@@ -57,7 +57,7 @@ class Listing(models.Model):
 
 
 class Bid(models.Model):
-    amount = models.DecimalField()
+    amount = models.DecimalField(max_digits=9, decimal_places=2)
     bid_time = models.DateTimeField()
     winning_bid = models.BooleanField()
     listing_id = models.ForeignKey(Listing, on_delete=models.CASCADE)
