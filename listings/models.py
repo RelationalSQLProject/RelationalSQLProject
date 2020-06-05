@@ -23,6 +23,7 @@ class Listing(models.Model):
     updated_at = models.DateField(auto_now=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
     starting_price = models.DecimalField(decimal_places=2)
     ending_price = models.DecimalField(decimal_places=2)
     winning_bidder = models.ForeignKey(User, related_name='won_auction', blank=True, null=True)
@@ -42,10 +43,22 @@ class Listing(models.Model):
     def remaining_minutes(self):
         pass
 
+    def get_winning_bid(self):
+        if self.is_active:
+            # If expired
+            if self.has_ended():
+                # Define winner
+                highest_bid = Bid.objects.filter(listing_id=self).order_by('-amount').order_by('bid_time').first()
+                if highest_bid:
+                    self.winning_bidder = highest_bid.bid_user
+                    self.ending_price = highest_bid.amount
+                self.is_active = False
+                self.save()
+
 
 class Bid(models.Model):
-    amount = models.IntegerField()
-    bid_time = models.DateField()
+    amount = models.DecimalField()
+    bid_time = models.DateTimeField()
     winning_bid = models.BooleanField()
     listing_id = models.ForeignKey(Listing, on_delete=models.CASCADE)
     bid_user = models.ForeignKey(User, on_delete=models.CASCADE)
