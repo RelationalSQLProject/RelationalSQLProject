@@ -53,6 +53,7 @@ class Listing(models.Model):
 
     def remaining_time(self):
         # is there a good library/pre-written function for this?
+        pass
 
     def get_winning_bid(self):
         if self.is_active:
