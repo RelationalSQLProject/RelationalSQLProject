@@ -7,8 +7,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
-from accounts.forms import SignUpForm
+from accounts.forms import SignUpForm, UpdateUserProfileForm
 from accounts.tokens import account_activation_token
 
 
@@ -19,6 +20,8 @@ def home_view(request):
 def activation_sent_view(request):
     return render(request, 'accounts/activation_sent.html')
 
+def profile_updated_view(request):
+    return render(request, 'accounts/profile_updated.html')
 
 def activate(request, uidb64, token):
     try:
@@ -66,3 +69,18 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
 
+@login_required
+def update_user_profile_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UpdateUserProfileForm(request.POST)
+        if form.is_valid():
+            user.profile.first_name = form.cleaned_data.get('first_name')
+            user.profile.last_name = form.cleaned_data.get('last_name')
+            user.save()
+            return redirect('profile_updated_view')
+    else:
+        form = UpdateUserProfileForm()
+        form.fields['first_name'].initial = user.profile.first_name
+        form.fields['last_name'].initial = user.profile.last_name
+    return render(request, 'accounts/update_profile.html', {'form': form})
