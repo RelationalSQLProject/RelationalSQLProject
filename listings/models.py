@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User  ### ??? is this right ???
 from django.utils.timezone import now
@@ -55,8 +56,32 @@ class Listing(models.Model):
             return self.starting_price
 
     def remaining_time(self):
-        # is there a good library/pre-written function for this?
-        pass
+
+        # Still needs to be tested, but its a start!
+
+        delta = self.end_time - datetime.datetime.now()
+        if delta.days < 0:
+            return '0 seconds'
+        else:
+            weeks = delta.days / 7
+            days = delta.days % 7
+            hours = delta.seconds / 3600
+            minutes = (delta.seconds % 3600) / 60
+            seconds = (delta.seconds % 3600) % 60
+
+            time_string = ''
+            if weeks:
+                time_string += f'{weeks}'
+            if days:
+                time_string += f'{days}'
+            if hours:
+                time_string += f'{hours}'
+            if minutes:
+                time_string += f'{minutes}'
+            if seconds:
+                time_string += f'{seconds}'
+
+            return time_string
 
     def get_winning_bid(self):
         if self.is_active:
