@@ -44,6 +44,9 @@ class Listing(models.Model):
         all_bids = Bid.objects.filter(listing_id=self).order_by('amount').order_by('bid_time')
         return all_bids
 
+    def is_running(self):
+        return self.has_started() and not self.has_ended()
+
     def get_current_price(self):
         last_bid = Bid.objects.filter(listing_id=self).order_by('amount').order_by('bid_time').last()
         if last_bid:
@@ -62,6 +65,7 @@ class Listing(models.Model):
                 # Define winner
                 highest_bid = Bid.objects.filter(listing_id=self).order_by('-amount').order_by('bid_time').first()
                 ### wow, is '-amount' the indicating desc order? damn, that's good to know
+                # Yes, exactly! -Jmast
                 if highest_bid:
                     self.winning_bidder = highest_bid.bid_user
                     self.ending_price = highest_bid.amount
