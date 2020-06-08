@@ -20,8 +20,10 @@ def home_view(request):
 def activation_sent_view(request):
     return render(request, 'accounts/activation_sent.html')
 
+
 def profile_updated_view(request):
     return render(request, 'accounts/profile_updated.html')
+
 
 def activate(request, uidb64, token):
     try:
@@ -68,6 +70,7 @@ def signup_view(request):
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
+
 
 @login_required
 def update_user_profile_view(request):
