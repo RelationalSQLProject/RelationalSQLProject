@@ -1,7 +1,7 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from accounts.views import signup_view, activate, activation_sent_view
+from accounts.views import signup_view, activate, activation_sent_view, update_user_profile_view, profile_updated_view
 
 account_patterns = [
 
@@ -10,6 +10,8 @@ account_patterns = [
     path('signup/', signup_view, name='signup'),
     path('sent/', activation_sent_view, name='activation_sent'),
     path('activate/<slug:uidb64>/<slug:token>/', activate, name='activate'),
+    path('update_profile/', update_user_profile_view, name='update_user_profile_view'),
+    path('profile_updated_view/', profile_updated_view, name='profile_updated_view'),
 
     # Password reset/change urls
     path('password_change/done/',
