@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User  ### ??? is this right ???
 from django.utils.timezone import now
@@ -23,11 +24,11 @@ class Listing(models.Model):
     image = models.ImageField(upload_to='listing_images/', blank=True, default='auction_images/default/default.svg')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(auto_now=True)
     end_time = models.DateTimeField()
     is_active = models.BooleanField(default=True)
     starting_price = models.DecimalField(max_digits=9, decimal_places=2)
-    ending_price = models.DecimalField(max_digits=9, decimal_places=2)
+    ending_price = models.DecimalField(max_digits=9, decimal_places=2, blank=True)
     # winning_bidder = models.ForeignKey(User, related_name='won_auction', blank=True, null=True, on_delete=models.SET("deleted"))
     ### I think winning_bidder should associated via winning bid
 
@@ -44,6 +45,9 @@ class Listing(models.Model):
         all_bids = Bid.objects.filter(listing_id=self).order_by('amount').order_by('bid_time')
         return all_bids
 
+    def is_running(self):
+        return self.has_started() and not self.has_ended()
+
     def get_current_price(self):
         last_bid = Bid.objects.filter(listing_id=self).order_by('amount').order_by('bid_time').last()
         if last_bid:
@@ -52,8 +56,32 @@ class Listing(models.Model):
             return self.starting_price
 
     def remaining_time(self):
-        # is there a good library/pre-written function for this?
-        pass
+
+        # Still needs to be tested, but its a start!
+
+        delta = self.end_time - datetime.datetime.now()
+        if delta.days < 0:
+            return '0 seconds'
+        else:
+            weeks = delta.days / 7
+            days = delta.days % 7
+            hours = delta.seconds / 3600
+            minutes = (delta.seconds % 3600) / 60
+            seconds = (delta.seconds % 3600) % 60
+
+            time_string = ''
+            if weeks:
+                time_string += f'{weeks}'
+            if days:
+                time_string += f'{days}'
+            if hours:
+                time_string += f'{hours}'
+            if minutes:
+                time_string += f'{minutes}'
+            if seconds:
+                time_string += f'{seconds}'
+
+            return time_string
 
     def get_winning_bid(self):
         if self.is_active:
@@ -62,6 +90,7 @@ class Listing(models.Model):
                 # Define winner
                 highest_bid = Bid.objects.filter(listing_id=self).order_by('-amount').order_by('bid_time').first()
                 ### wow, is '-amount' the indicating desc order? damn, that's good to know
+                # Yes, exactly! -Jmast
                 if highest_bid:
                     self.winning_bidder = highest_bid.bid_user
                     self.ending_price = highest_bid.amount
