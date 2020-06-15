@@ -8,6 +8,8 @@ from listings.constants import PRODUCT_CONDITION, CATEGORIES
 
 
 class Product(models.Model):
+
+    seller = models.ForeignKey(User, related_name='auction_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     category = models.CharField(max_length=50, choices=CATEGORIES)
     condition = models.PositiveSmallIntegerField(choices=PRODUCT_CONDITION)
