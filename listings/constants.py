@@ -10,6 +10,14 @@ PRODUCT_CONDITION = (
 
 
 CATEGORIES = (
+    ('ART', 'Art'),
+    ('SG', 'Sporting Goods'),
+    ('ELECTRON', 'Electronics'),
+    ('HOME', 'Home'),
+    ('MOTOR', 'Motor'),
+    ('ENT', 'Entertainment'),
+    ('TOYS', 'Toys'),
+    ('OTHER', 'Other'),
 
 )
 
