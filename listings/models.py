@@ -24,11 +24,11 @@ class Listing(models.Model):
     image = models.ImageField(upload_to='listing_images/', blank=True, default='auction_images/default/default.svg')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(auto_now=True)
     end_time = models.DateTimeField()
     is_active = models.BooleanField(default=True)
     starting_price = models.DecimalField(max_digits=9, decimal_places=2)
-    ending_price = models.DecimalField(max_digits=9, decimal_places=2)
+    ending_price = models.DecimalField(max_digits=9, decimal_places=2, blank=True)
     # winning_bidder = models.ForeignKey(User, related_name='won_auction', blank=True, null=True, on_delete=models.SET("deleted"))
     ### I think winning_bidder should associated via winning bid
 
