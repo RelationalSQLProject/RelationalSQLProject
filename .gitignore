@@ -108,3 +108,8 @@ myvenv/
 .vscode/
 
 secrets.json
+
+# project related files
+# listing images
+.listing_images
+listing_images
