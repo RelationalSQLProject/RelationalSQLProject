@@ -20,13 +20,13 @@ from django.urls import path, include
 
 from accounts.urls import account_patterns
 from accounts.views import home_view
+from listings.urls import listing_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('accounts/', include(account_patterns), name='accounts'),
-
-
+    path('listings/', include(listing_patterns), name='listings')
 ]
 
 if settings.DEBUG:
